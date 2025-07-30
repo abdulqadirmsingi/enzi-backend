@@ -5,8 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "echo 'Starting build...' && npm run db:generate && echo 'Prisma generated, compiling TypeScript...' && tsc && echo 'Build complete!'",
+    "build": "echo 'Starting build...' && npm run db:generate && echo 'Prisma generated, compiling TypeScript...' && tsc && echo 'Build complete!' && ls -la dist/",
     "start": "node dist/server.js",
+    "start:verify": "ls -la dist/ && node dist/server.js",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
