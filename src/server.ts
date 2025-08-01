@@ -52,12 +52,29 @@ app.use(
 );
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:8080",
+  "https://enzi-frontend.onrender.com",
+];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:8080",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Log the rejected origin for debugging
+      console.log(`CORS rejected origin: ${origin}`);
+      return callback(new Error("Not allowed by CORS"), false);
+    },
     credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    optionsSuccessStatus: 200, // For legacy browser support
   })
 );
 
